@@ -1,0 +1,7 @@
+# Remove '.sample' and fill in the settings
+
+# Database settings
+spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password={PASSWORD}
+spring.datasource.driver-class-name=org.postgresql.Driver
