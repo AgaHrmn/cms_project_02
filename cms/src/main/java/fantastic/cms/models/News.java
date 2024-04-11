@@ -1,18 +1,41 @@
 package fantastic.cms.models;
 
 import java.util.Set;
+
+import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.UuidGenerator;
 
 @Data
+@Entity
+@Table(name = "news")
 public class News {
+    @Id
+    @UuidGenerator
     String id;
     String title;
     String content;
     User author;
 
+    @ManyToMany
+    @JoinTable(name = "news_reviewers",
+            joinColumns = @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     Set<User> mandatoryReviewers;
+
+    @OneToMany
     Set<Review> reviews;
+
+    @ManyToMany
+    @JoinTable(name = "news_categories",
+            joinColumns = @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     Set<Category> categories;
+
+    @ManyToMany
+    @JoinTable(name = "news_tags",
+            joinColumns = @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     Set<Tag> tags;
 
     public Review addReview(String userId, Status status) {
@@ -27,7 +50,6 @@ public class News {
                         .anyMatch(review -> reviewer.id.equals(review.userId) &&
                                 Status.APPROVED == review.status));
     }
-
 
     public Set<Review> getReviews() {
         return reviews;
