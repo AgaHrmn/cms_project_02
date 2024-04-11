@@ -20,7 +20,7 @@ public class NewsService {
     }
 
     public News update(String id, NewsRequest newsRequest) {
-        final News news = this.newsRepository.findOne(id);
+        final News news = this.newsRepository.findById(id).orElseThrow();
         news.setTitle(newsRequest.getTitle());
         news.setContent(newsRequest.getContent());
         news.setTags(newsRequest.getTags());
@@ -38,8 +38,7 @@ public class NewsService {
     }
 
     public void delete(String id) {
-        final News news = this.newsRepository.findOne(id);
-        this.newsRepository.delete(news);
+        this.newsRepository.deleteById(id);
     }
 
     public List<News> findAll() {
@@ -47,16 +46,12 @@ public class NewsService {
     }
 
     public News findOne(String id) {
-        return this.newsRepository.findOne(id);
+        return this.newsRepository.findById(id).orElseThrow();
     }
 
 
     public Review addReview(String newsId, String userId, Review review) {
-        News news = newsRepository.findOne(newsId);
-        if (news == null) {
-            // Handle case where news article is not found
-            return null;
-        }
+        News news = newsRepository.findById(newsId).orElseThrow();
 
         // Add review to the news article
         news.addReview(review.getUserId(), review.getStatus());
@@ -65,21 +60,13 @@ public class NewsService {
     }
 
     public Set<Review> getReviews(String newsId) {
-        News news = newsRepository.findOne(newsId);
-        if (news == null) {
-            // Handle case where news article is not found
-            return null;
-        }
+        News news = newsRepository.findById(newsId).orElseThrow();
 
         return news.getReviews();
     }
 
     public void deleteReview(String newsId, String reviewId) {
-        News news = newsRepository.findOne(newsId);
-        if (news == null) {
-            // Handle case where news article is not found
-            return;
-        }
+        News news = newsRepository.findById(newsId).orElseThrow();
 
         news.deleteReview(reviewId);
         newsRepository.save(news);
