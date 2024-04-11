@@ -4,7 +4,6 @@ import fantastic.cms.models.Role;
 
 @Data
 public class UserRequest {
-    String identity;
     String name;
     Role role;
 }
