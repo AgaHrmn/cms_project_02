@@ -1,7 +1,6 @@
 package fantastic.cms.repositories;
 import fantastic.cms.models.User;
-import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Service
-public class UserRepository extends AbstractRepository<User>{
+public interface UserRepository extends JpaRepository<User, String> {
 }

@@ -1,7 +1,6 @@
 package fantastic.cms.repositories;
 import fantastic.cms.models.News;
-import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Service
-public class NewsRepository extends AbstractRepository<News> {
+public interface NewsRepository extends JpaRepository<News, String> {
 }
