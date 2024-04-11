@@ -6,10 +6,12 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @Table(name = "category")
-public class Category {
+public class Category  implements Serializable {
     @Id
     @UuidGenerator
     String id;

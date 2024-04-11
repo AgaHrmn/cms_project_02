@@ -14,9 +14,9 @@ public class UserService {
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
+
     public User update(String id, UserRequest userRequest) {
-        final User user = this.userRepository.findOne(id);
-        user.setIdentity(userRequest.getIdentity());
+        final User user = this.userRepository.findById(id).orElseThrow();
         user.setName(userRequest.getName());
         user.setRole(userRequest.getRole());
         return this.userRepository.save(user);
@@ -24,16 +24,13 @@ public class UserService {
 
     public User create(UserRequest userRequest) {
         User user = new User();
-        user.setId(UUID.randomUUID().toString());
-        user.setIdentity(userRequest.getIdentity());
         user.setName(userRequest.getName());
         user.setRole(userRequest.getRole());
         return this.userRepository.save(user);
     }
 
     public void delete(String id) {
-        final User user = this.userRepository.findOne(id);
-        this.userRepository.delete(user);
+        this.userRepository.deleteById(id);
     }
 
     public List<User> findAll() {
@@ -41,6 +38,6 @@ public class UserService {
     }
 
     public User findOne(String id) {
-        return this.userRepository.findOne(id);
+        return this.userRepository.findById(id).orElseThrow();
     }
 }
