@@ -40,4 +40,8 @@ public class UserService {
     public User findOne(String id) {
         return this.userRepository.findById(id).orElseThrow();
     }
+    public void registerNewUser(User user) {
+        // You may want to perform additional validations here before saving the user
+        userRepository.save(user);
+    }
 }
