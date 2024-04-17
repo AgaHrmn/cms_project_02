@@ -17,12 +17,14 @@ public class User implements Serializable {
 
     String name;
 
-    @Column(nullable = false, unique = true, length = 45)
-    private String email;
-    @Column(nullable = false, length = 64)
-    private String password;
-    @Column(name = "username", nullable = false, length = 20)
-    private String username;
+    @Column(unique = true)
+    String username;
+
+    @Column
+    String password;
+
+    @Column(unique = true)
+    String email;
 
     @Enumerated(EnumType.STRING)
     Role role;

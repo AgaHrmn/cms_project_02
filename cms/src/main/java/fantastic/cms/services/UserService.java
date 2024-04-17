@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import fantastic.cms.models.User;
 import fantastic.cms.repositories.UserRepository;
 import fantastic.cms.requests.UserRequest;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,8 +41,15 @@ public class UserService {
     public User findOne(String id) {
         return this.userRepository.findById(id).orElseThrow();
     }
+    @Transactional
     public void registerNewUser(User user) {
-        // You may want to perform additional validations here before saving the user
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         userRepository.save(user);
     }
 }
