@@ -17,6 +17,15 @@ public class User implements Serializable {
 
     String name;
 
+    @Column(unique = true)
+    String username;
+
+    @Column
+    String password;
+
+    @Column(unique = true)
+    String email;
+
     @Enumerated(EnumType.STRING)
     Role role;
 
