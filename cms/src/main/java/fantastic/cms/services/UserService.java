@@ -1,6 +1,9 @@
 package fantastic.cms.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import fantastic.cms.models.User;
 import fantastic.cms.repositories.UserRepository;
 import fantastic.cms.requests.UserRequest;
@@ -11,6 +14,9 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
@@ -49,7 +55,7 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 }
