@@ -25,7 +25,11 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user) {
+    public String registerUser(@ModelAttribute("user") User user, Model model) {
+        if (userService.usernameExists(user.getUsername())) {
+            model.addAttribute("usernameError", "Username already taken");
+            return "register";
+        }
         userService.registerNewUser(user);
         return "redirect:/login";
     }
