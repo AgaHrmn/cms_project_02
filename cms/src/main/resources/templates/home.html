@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <title>Spring Security Example</title>
-    </head>
-    <body>
-        <h1>Welcome!</h1>
-
-        <p>Login <a th:href="@{/login}">here</a> to continue or register <a th:href="@{/register}">here</a> </p>
-    </body>
+<head>
+    <link rel="stylesheet" th:href="@{css/homestyles.css}" />
+    <title>Welcome traveler!</title>
+</head>
+<body>
+    <h1>Welcome to Fantastic CMS</h1> 
+    <p>Sign in <a th:href="@{/login}">here</a> to access your account or create a new one <a th:href="@{/register}">here</a></p> 
+</body>
 </html>

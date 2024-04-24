@@ -12,34 +12,37 @@
 <header>
     <h1>Welcome to FANTASTIC CMS</h1>
 </header>
-<nav>
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-    </ul>
-</nav>
+
 <section class="latest_news">
     <h2>Latest News</h2>
-    <ul>
-        <li th:each="news : ${newsList}">
-            <p th:text="${news.title}"></p>
-            <p th:text="${news.content}"></p>
-        </li>
-    </ul>
+    <div class="news-tiles">
+        <ul>
+            <li th:each="news : ${newsList}" class="news-tile">
+                <h3 th:text="${news.title}"></h3>
+                <p th:text="${news.content}"></p>
+            </li>
+        </ul>
+    </div>
 </section>
+
 <section class="categories">
     <h2>Categories</h2>
-    <ul>
-        <li th:each="category : ${categoryList}" th:text="${category.name}"></li>
-    </ul>
+    <div class="category-tiles">
+        <ul>
+            <li th:each="category : ${categoryList}" class="category-tile" th:text="${category.name}"></li>
+        </ul>
+    </div>
 </section>
+
 <section class="users">
     <h2>Users</h2>
-    <ul>
-        <li th:each="user : ${userList}" th:text="${user.username}"></li>
-    </ul>
+    <div class="user-tiles">
+        <ul>
+            <li th:each="user : ${userList}" class="user-tile" th:text="${user.username}"></li>
+        </ul>
+    </div>
 </section>
+
 <footer>
     <p>&copy; 2024 FANTASTIC CMS. All rights reserved.</p>
 </footer>
