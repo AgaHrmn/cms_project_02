@@ -13,6 +13,12 @@
 
     <section class="register-form"> 
         <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+            <div th:if="${usernameError}">
+                <p th:text="${usernameError}" style="color: red;"></p>
+            </div>
+            <div th:if="${EmailError}">
+                <p th:text="${EmailError}" style="color: red;"></p>
+            </div>
             <div>
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" th:field="*{username}" required>

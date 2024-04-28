@@ -30,6 +30,10 @@ public class RegistrationController {
             model.addAttribute("usernameError", "Username already taken");
             return "register";
         }
+        if (userService.emailExists(user.getEmail())) {
+            model.addAttribute("EmailError", "Email already taken");
+            return "register";
+        }
         userService.registerNewUser(user);
         return "redirect:/login";
     }
