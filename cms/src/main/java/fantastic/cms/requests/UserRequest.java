@@ -6,4 +6,6 @@ import fantastic.cms.models.Role;
 public class UserRequest {
     String name;
     Role role;
+    private String password;
+
 }

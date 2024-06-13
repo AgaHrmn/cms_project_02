@@ -26,6 +26,13 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user, Model model) {
+        try {
+            userService.registerNewUser(user);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
+        }
+
         if (userService.usernameExists(user.getUsername())) {
             model.addAttribute("usernameError", "Username already taken");
             return "register";
@@ -34,7 +41,6 @@ public class RegistrationController {
             model.addAttribute("EmailError", "Email already taken");
             return "register";
         }
-        userService.registerNewUser(user);
         return "redirect:/login";
     }
 }
