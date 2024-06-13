@@ -11,6 +11,8 @@ import java.util.Set;
 @Entity
 @Table(name = "`user`")
 public class User implements Serializable {
+
+
     @Id
     @UuidGenerator
     String id;
@@ -31,4 +33,8 @@ public class User implements Serializable {
 
     @ManyToMany(mappedBy = "mandatoryReviewers")
     Set<News> news;
+
+    
+    
+    private boolean enabled = false;
 }
