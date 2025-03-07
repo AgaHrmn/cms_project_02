@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import fantastic.cms.models.User;
 import fantastic.cms.services.UserService;
-import jakarta.persistence.Entity;
 
 @Controller
 public class RegistrationController {
@@ -26,13 +25,6 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute("user") User user, Model model) {
-        try {
-            userService.registerNewUser(user);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            return "register";
-        }
-
         if (userService.usernameExists(user.getUsername())) {
             model.addAttribute("usernameError", "Username already taken");
             return "register";
@@ -41,6 +33,14 @@ public class RegistrationController {
             model.addAttribute("EmailError", "Email already taken");
             return "register";
         }
+
+        try {
+            userService.registerNewUser(user);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
+        }
+
         return "redirect:/login";
     }
 }
