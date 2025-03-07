@@ -79,7 +79,9 @@ public class UserService {
         String confirmationUrl = "http://localhost:8080/confirm?token=" + token;
         String message = "Please click the following link to verify your email address: " + confirmationUrl;
 
-        emailService.sendVerificationEmail(recipientAddress, subject, message);
+        // brak uzytkownika
+        // brak weryfikacji potwierdzenia maila podczas logowania
+        // emailService.sendVerificationEmail(recipientAddress, subject, message);
     }
 
     private void createVerificationToken(User user, String token) {
