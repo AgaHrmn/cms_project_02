@@ -1,4 +1,4 @@
-package fantastic.cms.securingweb;
+package fantastic.cms.services;
 
 import fantastic.cms.models.User;
 import fantastic.cms.repositories.UserRepository;

@@ -1,4 +1,4 @@
-package  fantastic.cms.securingweb;
+package fantastic.cms.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ public class WebSecurityConfig {
 
 	@Autowired
     private UserDetailsService userDetailsService;
-	
+
 	@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
@@ -26,7 +26,7 @@ public class WebSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/css/**","/","/home", "/register","/login").permitAll()
+				.requestMatchers("favicon", "/css/**","/home", "/register","/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form
@@ -34,11 +34,10 @@ public class WebSecurityConfig {
 				.permitAll()
 				.defaultSuccessUrl("/", true)
 			)
+			// nie ma strony /logout
 			.logout((logout) -> logout.permitAll());
 
 		return http.build();
 	}
 
-	
-	
 }
