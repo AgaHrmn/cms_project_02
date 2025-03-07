@@ -4,6 +4,7 @@ cms/target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 cms/src/main/resources/application-dev.properties
+cms/src/main/resources/application.properties
 
 ### STS ###
 .apt_generated
