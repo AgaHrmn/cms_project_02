@@ -44,6 +44,12 @@
 </section>
 
 <footer>
+    <form method="POST" action="/logout">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <button type="submit">Logout</button>
+    </form>
+
+
     <p>&copy; 2024 FANTASTIC CMS. All rights reserved.</p>
 </footer>
 </body>
