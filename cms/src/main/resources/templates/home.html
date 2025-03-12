@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" th:href="@{css/homestyles.css}" />
-    <title>Welcome traveler!</title>
+    <title>Welcome traveler</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <h1>Welcome to Fantastic CMS</h1> 
-    <p>Sign in <a th:href="@{/login}">here</a> to access your account or create a new one <a th:href="@{/register}">here</a></p> 
+<header>
+    <h1>Welcome to our Fantastic CMS</h1>
+    <p>Your place to share and discuss news</p>
+</header>
+
+<nav>
+    <a th:href="@{/login}">Login</a>
+    <a th:href="@{/register}">Register</a>
+</nav>
+
+<section>
+    <h2>About Our App</h2>
+    <p>This is a community-driven forum where users can post news articles and discuss them.</p>
+    <p>Join us today and be part of the conversation!</p>
+</section>
+
+<footer>
+    <p>&copy; 2025 CMS Forum. All rights reserved.</p>
+</footer>
 </body>
 </html>
