@@ -64,6 +64,11 @@ public class UserService {
         return this.userRepository.findById(id).orElseThrow();
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+
     public User getCurrentAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

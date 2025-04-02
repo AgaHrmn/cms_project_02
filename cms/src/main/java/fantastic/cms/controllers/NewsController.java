@@ -1,15 +1,20 @@
 package fantastic.cms.controllers;
 
 import fantastic.cms.models.Category;
+import fantastic.cms.models.News;
+import fantastic.cms.models.User;
 import fantastic.cms.requests.NewsRequest;
 import fantastic.cms.services.CategoryService;
 import fantastic.cms.services.NewsService;
+import fantastic.cms.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,19 +27,43 @@ public class NewsController {
     @Autowired
     private CategoryService categoryService;
 
-    // Display news creation form
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/news/create")
     public String showNewsForm(Model model) {
-        List<Category> categories = categoryService.findAll(); // Fetch all categories
-        model.addAttribute("newsRequest", new NewsRequest());
-        model.addAttribute("categories", categories); // Pass categories to the form
-        return "newsForm"; // Return the name of the view (newsForm.html)
+        model.addAttribute("categories", categoryService.findAll());
+        return "newsForm";
     }
 
-    // Handle form submission
     @PostMapping("/news/create")
-    public String createNews(@ModelAttribute NewsRequest newsRequest) {
-        newsService.create(newsRequest);  // Call the service to save the news
-        return "redirect:/main";  // Redirect to the main page or another page after submission
+    public String create(@RequestParam String title,
+                         @RequestParam String content,
+                         @RequestParam(required = false) String categoryId,
+                         @RequestParam(required = false) String newCategoryName) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User author = userService.findByUsername(username);
+
+        if (author == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        System.out.println("DEBUG - Author ID: " + author.getId());
+        System.out.println("DEBUG - Selected Category ID: " + categoryId);
+        System.out.println("DEBUG - New Category Name: " + newCategoryName);
+
+        NewsRequest newsRequest = new NewsRequest();
+        newsRequest.setTitle(title);
+        newsRequest.setContent(content);
+        newsRequest.setCategoryId(categoryId);
+        newsRequest.setNewCategoryName(newCategoryName);
+        newsRequest.setAuthorId(author.getId());
+
+        newsService.create(newsRequest);
+
+        return "redirect:/";
     }
+
 }

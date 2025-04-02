@@ -12,13 +12,13 @@ import org.hibernate.annotations.UuidGenerator;
 public class News {
     @Id
     @UuidGenerator
-    String id;
-    String title;
-    String content;
+    private String id;
 
+    private String title;
+    private String content;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false) // Foreign key to Category
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne
