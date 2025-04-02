@@ -9,6 +9,8 @@ import fantastic.cms.models.Category;
 public class NewsRequest {
     private String title;
     private String content;
-    private Category category;
+    private String categoryId;  // ID of the category
+    private String newCategory; // Optionally, for new category name if required
+    private String authorId;    // ID of the author
 
 }
