@@ -1,6 +1,8 @@
 package fantastic.cms.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import fantastic.cms.models.User;
@@ -60,6 +62,12 @@ public class UserService {
 
     public User findOne(String id) {
         return this.userRepository.findById(id).orElseThrow();
+    }
+
+    public User getCurrentAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userRepository.findByUsername(username);
     }
 
     @Transactional

@@ -7,10 +7,8 @@ import fantastic.cms.models.Category;
 
 @Data
 public class NewsRequest {
-    String title;
-    String content;
-
-
-    Set<Category> categories;
+    private String title;
+    private String content;
+    private Category category;
 
 }

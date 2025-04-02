@@ -8,21 +8,21 @@ import org.hibernate.annotations.UuidGenerator;
 
 @Data
 @Entity
-@Table(name = "news")
+@Table(name = "news", schema = "my_schema")
 public class News {
     @Id
     @UuidGenerator
     String id;
     String title;
     String content;
-    User author;
 
 
-    @ManyToMany
-    @JoinTable(name = "news_categories",
-            joinColumns = @JoinColumn(name = "news_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    Set<Category> categories;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false) // Foreign key to Category
+    private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
 
 }
