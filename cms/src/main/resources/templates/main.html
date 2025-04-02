@@ -24,7 +24,8 @@
         <ul>
             <li th:each="news : ${newsList}" class="news-tile">
                 <h3 th:text="${news.title}"></h3>
-                <h3 th:text="'By: ' + ${news.author.username}"></h3>
+                <h4 th:text="'By: ' + ${news.author.username}"></h4>
+                <h4 th:text="'Category: ' + ${news.category.name}"></h4>
                 <p th:text="${news.content}"></p>
             </li>
         </ul>
