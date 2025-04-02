@@ -38,14 +38,12 @@ public class UserService {
     public User update(String id, UserRequest userRequest) {
         User user = this.userRepository.findById(id).orElseThrow();
         user.setName(userRequest.getName());
-        user.setRole(userRequest.getRole());
         return this.userRepository.save(user);
     }
 
     public User create(UserRequest userRequest) {
         User user = new User();
         user.setName(userRequest.getName());
-        user.setRole(userRequest.getRole());
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setEnabled(false);
         logger.info("Creating user with username: {}", userRequest.getName());

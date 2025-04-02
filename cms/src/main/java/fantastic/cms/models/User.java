@@ -27,14 +27,6 @@ public class User implements Serializable {
 
     @Column(unique = true)
     String email;
-
-    @Enumerated(EnumType.STRING)
-    Role role;
-
-    @ManyToMany(mappedBy = "mandatoryReviewers")
-    Set<News> news;
-
-    
     
     private boolean enabled = false;
 }
