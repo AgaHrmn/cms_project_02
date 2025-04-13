@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "`user`", schema = "my_schema")
+@Table(name = "`user`")
 public class User implements Serializable {
 
 

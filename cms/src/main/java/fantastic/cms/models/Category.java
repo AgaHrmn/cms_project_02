@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "category", schema = "my_schema")
+@Table(name = "category")
 public class Category  implements Serializable {
     @Id
     @UuidGenerator
