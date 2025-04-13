@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import fantastic.cms.models.Category;
 import fantastic.cms.requests.CategoryRequest;
@@ -44,7 +47,9 @@ public class CategoryResource {
     @ApiResponse(responseCode = "400", description = "invalid request")
     @ApiResponse(responseCode = "201", description = "Category created successfully")
     public ResponseEntity<Category> newCategory(@RequestBody CategoryRequest category) {
-        return new ResponseEntity<>(this.categoryService.create(category), HttpStatus.CREATED);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        return new ResponseEntity<>(this.categoryService.create(category, currentPrincipalName), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

@@ -9,11 +9,14 @@ import fantastic.cms.services.NewsService;
 import fantastic.cms.repositories.CategoryRepository;
 import fantastic.cms.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,7 +44,9 @@ public class CategoryController {
     // Handle form submission and redirect to main.html
     @PostMapping("/category/create")
     public String saveCategory(@ModelAttribute CategoryRequest categoryRequest) {
-        categoryService.create(categoryRequest);  // Pass CategoryRequest to service
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        categoryService.create(categoryRequest, currentPrincipalName);  // Pass CategoryRequest to service
         return "redirect:/main";  // Redirect to main.html after category is created
     }
 
@@ -54,6 +59,15 @@ public class CategoryController {
         model.addAttribute("userList", users);  // Pass the user list to the template
         model.addAttribute("newsList", getNewsList());  // Add any news list if needed
         return "main";  // Return the view for the main page
+    }
+
+    @DeleteMapping(value = "/category/delete")
+    ResponseEntity<?> deleteCategory(@PathVariable String categoryId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        var roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        categoryService.delete(categoryId, currentPrincipalName, roles);
+        return ResponseEntity.noContent().build();
     }
 
     // Add logic to fetch news, if necessary

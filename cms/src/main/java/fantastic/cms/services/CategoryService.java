@@ -1,6 +1,8 @@
 package fantastic.cms.services;
 
+import fantastic.cms.repositories.UserRepository;
 import fantastic.cms.requests.CategoryRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +18,11 @@ import javax.management.InstanceNotFoundException;
 @Transactional(readOnly = true)
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository) {
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -27,9 +31,10 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category create(CategoryRequest request) {
+    public Category create(CategoryRequest request, String userName) {
         Category category = new Category();
         category.setName(request.getName());
+        category.author = userRepository.findByUsername(userName);
         return this.categoryRepository.save(category);
     }
 
