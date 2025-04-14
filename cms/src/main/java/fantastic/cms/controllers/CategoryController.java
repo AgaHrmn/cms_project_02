@@ -4,6 +4,7 @@ import fantastic.cms.models.Category;
 import fantastic.cms.models.News;
 import fantastic.cms.models.User;
 import fantastic.cms.requests.CategoryRequest;
+import fantastic.cms.requests.DeleteCategoryRequest;
 import fantastic.cms.services.CategoryService;
 import fantastic.cms.services.NewsService;
 import fantastic.cms.repositories.CategoryRepository;
@@ -61,13 +62,13 @@ public class CategoryController {
         return "main";  // Return the view for the main page
     }
 
-    @DeleteMapping(value = "/category/delete")
-    ResponseEntity<?> deleteCategory(@PathVariable String categoryId) {
+    @PostMapping(value = "/category/delete")
+    public String deleteCategory(@ModelAttribute DeleteCategoryRequest deleteCategoryRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        var roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-        categoryService.delete(categoryId, currentPrincipalName, roles);
-        return ResponseEntity.noContent().build();
+        categoryService.delete(deleteCategoryRequest.getCategoryId(), currentPrincipalName);
+        return "redirect:/main";  // Redirect to main.html after category is created
+//        return ResponseEntity.noContent().build();
     }
 
     // Add logic to fetch news, if necessary

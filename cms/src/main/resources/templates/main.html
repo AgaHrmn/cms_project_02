@@ -41,7 +41,13 @@
 
     <div class="category-tiles">
         <ul>
-            <li th:each="category : ${categoryList}" class="category-tile" th:text="${category.name}"></li>
+            <li th:each="category : ${categoryList}" class="category-tile" >
+                <span th:text="${category.name}"></span>
+                <form th:action="@{/category/delete}" th:method="POST">
+                    <input type="hidden" name="categoryId" th:value="${category.id}" />
+                    <button type="submit"> X </button>
+                </form>
+            </li>
         </ul>
     </div>
 </section>
