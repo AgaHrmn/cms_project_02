@@ -1,5 +1,6 @@
 package fantastic.cms.services;
 
+import fantastic.cms.constant.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,6 +49,7 @@ public class UserService {
         user.setName(userRequest.getName());
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setEnabled(false);
+        user.setType(UserType.STANDARD_USER);
         logger.info("Creating user with username: {}", userRequest.getName());
         return this.userRepository.save(user);
     }
@@ -92,6 +94,7 @@ public class UserService {
 
         // Encrypt password and save user
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setType(UserType.STANDARD_USER);
         userRepository.save(user);
 
         logger.info("User successfully registered: {}", user.getUsername());
@@ -101,11 +104,11 @@ public class UserService {
         createVerificationToken(user, token);
 
         // Send verification email (uncomment during testing)
-        String recipientAddress = user.getEmail();
-        String subject = "Registration Confirmation";
-        String confirmationUrl = "http://localhost:8080/confirm?token=" + token;
-        String message = "Please click the following link to verify your email address: " + confirmationUrl;
-        emailService.sendVerificationEmail(recipientAddress, subject, message);
+//        String recipientAddress = user.getEmail();
+//        String subject = "Registration Confirmation";
+//        String confirmationUrl = "http://localhost:8080/confirm?token=" + token;
+//        String message = "Please click the following link to verify your email address: " + confirmationUrl;
+//        emailService.sendVerificationEmail(recipientAddress, subject, message);
     }
 
     private void createVerificationToken(User user, String token) {
