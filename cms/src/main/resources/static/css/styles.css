@@ -108,3 +108,40 @@ footer {
     font-size: 0.9em;
     margin-top: auto;
 }
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 30px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn-login {
+    background: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+.btn-login:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.btn-register {
+    background: #007bff;
+    border: none;
+    color: #ffffff;
+}
+.btn-register:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
