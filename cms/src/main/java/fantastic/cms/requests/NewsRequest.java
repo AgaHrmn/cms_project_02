@@ -9,5 +9,5 @@ public class NewsRequest {
     private String categoryId;
     private String newCategoryName;
     private String authorId;
-
+    private boolean comments;
 }

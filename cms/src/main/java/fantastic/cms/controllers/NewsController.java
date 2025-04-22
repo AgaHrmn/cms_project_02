@@ -40,7 +40,8 @@ public class NewsController {
     public String create(@RequestParam String title,
                          @RequestParam String content,
                          @RequestParam(required = false) String categoryId,
-                         @RequestParam(required = false) String newCategoryName) {
+                         @RequestParam(required = false) String newCategoryName,
+                         @RequestParam(required = false) boolean commentsEnabled) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -53,6 +54,7 @@ public class NewsController {
         System.out.println("DEBUG - Author ID: " + author.getId());
         System.out.println("DEBUG - Selected Category ID: " + categoryId);
         System.out.println("DEBUG - New Category Name: " + newCategoryName);
+        System.out.println("DEBUG - comments toggle: " + commentsEnabled);
 
         NewsRequest newsRequest = new NewsRequest();
         newsRequest.setTitle(title);
@@ -60,7 +62,7 @@ public class NewsController {
         newsRequest.setCategoryId(categoryId);
         newsRequest.setNewCategoryName(newCategoryName);
         newsRequest.setAuthorId(author.getId());
-
+        newsRequest.setComments(commentsEnabled);
         newsService.create(newsRequest);
 
         return "redirect:/";
