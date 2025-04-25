@@ -31,6 +31,9 @@
                     <input type="hidden" name="newsId" th:value="${news.id}"/>
                     <button type="submit"> X </button>
                 </form>
+                <div th:if="${errorDeleteNews}" class="error-popup">
+                    <span th:text="${errorDeleteNews}"></span>
+                </div>
                 </p>
             </li>
         </ul>
@@ -52,6 +55,9 @@
                     <input type="hidden" name="categoryId" th:value="${category.id}" />
                     <button type="submit"> X </button>
                 </form>
+                <div th:if="${errorDeleteCategory}" class="error-popup">
+                    <span th:text="${errorDeleteCategory}"></span>
+                </div>
             </li>
         </ul>
     </div>
@@ -74,5 +80,15 @@
 
     <p>&copy; 2024 FANTASTIC CMS. All rights reserved.</p>
 </footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var errorPopup = document.querySelector(".error-popup");
+        if (errorPopup) {
+            setTimeout(function() {
+                errorPopup.style.opacity = "0";
+            }, 5000); // Dymek znika po 5 sekundach
+        }
+    });
+</script>
 </body>
 </html>

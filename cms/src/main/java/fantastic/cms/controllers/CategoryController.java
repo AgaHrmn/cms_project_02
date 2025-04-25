@@ -11,6 +11,7 @@ import fantastic.cms.repositories.CategoryRepository;
 import fantastic.cms.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -63,10 +65,15 @@ public class CategoryController {
     }
 
     @PostMapping(value = "/category/delete")
-    public String deleteCategory(@ModelAttribute DeleteCategoryRequest deleteCategoryRequest) {
+    public String deleteCategory(@ModelAttribute DeleteCategoryRequest deleteCategoryRequest, RedirectAttributes redirectAttributes) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        categoryService.delete(deleteCategoryRequest.getCategoryId(), currentPrincipalName);
+        try {
+            categoryService.delete(deleteCategoryRequest.getCategoryId(), currentPrincipalName);
+        } catch (AccessDeniedException e) {
+            redirectAttributes.addFlashAttribute("errorDeleteCategory", e.getMessage());
+            return "redirect:/main";
+        }
         return "redirect:/main";  // Redirect to main.html after category is created
     }
 

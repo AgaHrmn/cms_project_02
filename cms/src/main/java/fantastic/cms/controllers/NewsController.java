@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -72,10 +73,15 @@ public class NewsController {
     }
 
     @PostMapping(value = "/news/delete")
-    public String deleteNews(@ModelAttribute DeleteNewsRequest deleteNewsRequest) throws AccessDeniedException {
+    public String deleteNews(@ModelAttribute DeleteNewsRequest deleteNewsRequest, RedirectAttributes redirectAttributes) throws AccessDeniedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
-        newsService.delete(deleteNewsRequest.getNewsId(), currentPrincipalName);
+        try {
+            newsService.delete(deleteNewsRequest.getNewsId(), currentPrincipalName);
+        } catch (AccessDeniedException e) {
+            redirectAttributes.addFlashAttribute("errorDeleteNews", e.getMessage());
+            return "redirect:/main";
+        }
         return "redirect:/main";
     }
 
