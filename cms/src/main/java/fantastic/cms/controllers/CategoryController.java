@@ -68,7 +68,6 @@ public class CategoryController {
         String currentPrincipalName = authentication.getName();
         categoryService.delete(deleteCategoryRequest.getCategoryId(), currentPrincipalName);
         return "redirect:/main";  // Redirect to main.html after category is created
-//        return ResponseEntity.noContent().build();
     }
 
     // Add logic to fetch news, if necessary

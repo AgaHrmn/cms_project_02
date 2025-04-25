@@ -1,5 +1,6 @@
 package fantastic.cms.services;
 
+import fantastic.cms.constant.UserType;
 import fantastic.cms.models.News;
 import fantastic.cms.models.Category;
 import fantastic.cms.models.User;
@@ -12,6 +13,7 @@ import fantastic.cms.requests.NewsRequest;
 import org.springframework.transaction.annotation.Transactional;
 import fantastic.cms.services.UserService;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,6 +77,18 @@ public class NewsService {
         newsRepository.save(news);
     }
 
-
+    @Transactional
+    public void delete(String newsId, String currentPrincipalName) throws AccessDeniedException {
+        News news = newsRepository.findById(newsId).orElseThrow();
+        var type = userRepository.findByUsername(currentPrincipalName).getType();
+        String currentPrincipalId = userRepository.findByUsername(currentPrincipalName).getId();
+        if (type == UserType.ADMIN || type == UserType.MODERATOR) {
+            newsRepository.delete(news);
+        } else if (type == UserType.STANDARD_USER && news.author.getId().equals(currentPrincipalId)) {
+            newsRepository.delete(news);
+        } else {
+            throw new AccessDeniedException("Użytkownik nie posiada uprawnień do usunięcia newsa");
+        }
+    }
 
 }

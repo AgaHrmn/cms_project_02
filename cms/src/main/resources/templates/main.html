@@ -26,7 +26,12 @@
                 <h3 th:text="${news.title}"></h3>
                 <h4 th:text="'By: ' + ${news.author.username}"></h4>
                 <h4 th:text="'Category: ' + ${news.category.name}"></h4>
-                <p th:text="${news.content}"></p>
+                <p th:text="${news.content}">
+                <form th:action="@{/news/delete}" th:method="POST">
+                    <input type="hidden" name="newsId" th:value="${news.id}"/>
+                    <button type="submit"> X </button>
+                </form>
+                </p>
             </li>
         </ul>
     </div>

@@ -3,6 +3,7 @@ package fantastic.cms.controllers;
 import fantastic.cms.models.Category;
 import fantastic.cms.models.News;
 import fantastic.cms.models.User;
+import fantastic.cms.requests.DeleteNewsRequest;
 import fantastic.cms.requests.NewsRequest;
 import fantastic.cms.services.CategoryService;
 import fantastic.cms.services.NewsService;
@@ -13,9 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Controller
@@ -66,6 +69,14 @@ public class NewsController {
         newsService.create(newsRequest);
 
         return "redirect:/";
+    }
+
+    @PostMapping(value = "/news/delete")
+    public String deleteNews(@ModelAttribute DeleteNewsRequest deleteNewsRequest) throws AccessDeniedException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        newsService.delete(deleteNewsRequest.getNewsId(), currentPrincipalName);
+        return "redirect:/main";
     }
 
 }

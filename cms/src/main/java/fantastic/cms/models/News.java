@@ -12,7 +12,7 @@ import org.hibernate.annotations.UuidGenerator;
 public class News {
     @Id
     @UuidGenerator
-    private String id;
+    public String id;
 
     private String title;
     private String content;
@@ -23,6 +23,6 @@ public class News {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
-    private User author;
+    public User author;
 
 }
