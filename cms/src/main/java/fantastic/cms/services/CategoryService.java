@@ -1,6 +1,7 @@
 package fantastic.cms.services;
 
 import fantastic.cms.constant.UserType;
+import fantastic.cms.repositories.NewsRepository;
 import fantastic.cms.repositories.UserRepository;
 import fantastic.cms.requests.CategoryRequest;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,10 +21,12 @@ import javax.management.InstanceNotFoundException;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final NewsRepository newsRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository) {
+    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository, NewsRepository newsRepository) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.newsRepository = newsRepository;
     }
 
     @Transactional
@@ -44,9 +47,10 @@ public class CategoryService {
         Category category = categoryRepository.findById(categoryId).orElseThrow();
         var type = userRepository.findByUsername(currentPrincipalName).getType();
         String currentPrincipalId = userRepository.findByUsername(currentPrincipalName).getId();
-        if (type == UserType.ADMIN || type == UserType.MODERATOR) {
-            categoryRepository.delete(category);
-        } else if (type == UserType.STANDARD_USER && category.author.getId().equals(currentPrincipalId)) {
+        boolean isAdminOrModerator = type == UserType.ADMIN || type == UserType.MODERATOR;
+        boolean isAuthor = type == UserType.STANDARD_USER && category.author != null && category.author.getId().equals(currentPrincipalId);
+        if (isAdminOrModerator || isAuthor) {
+            newsRepository.deleteByCategoryId(categoryId);
             categoryRepository.delete(category);
         } else {
             throw new AccessDeniedException("Użytkownik nie posiada uprawnień do usunięcia kategorii");

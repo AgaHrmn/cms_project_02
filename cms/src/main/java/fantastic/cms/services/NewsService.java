@@ -1,21 +1,19 @@
 package fantastic.cms.services;
 
 import fantastic.cms.constant.UserType;
-import fantastic.cms.models.News;
 import fantastic.cms.models.Category;
+import fantastic.cms.models.News;
 import fantastic.cms.models.User;
-import fantastic.cms.repositories.NewsRepository;
 import fantastic.cms.repositories.CategoryRepository;
+import fantastic.cms.repositories.NewsRepository;
 import fantastic.cms.repositories.UserRepository;
+import fantastic.cms.requests.NewsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import fantastic.cms.requests.NewsRequest;
 import org.springframework.transaction.annotation.Transactional;
-import fantastic.cms.services.UserService;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NewsService {
@@ -28,6 +26,7 @@ public class NewsService {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserService userService;
 
@@ -82,9 +81,9 @@ public class NewsService {
         News news = newsRepository.findById(newsId).orElseThrow();
         var type = userRepository.findByUsername(currentPrincipalName).getType();
         String currentPrincipalId = userRepository.findByUsername(currentPrincipalName).getId();
-        if (type == UserType.ADMIN || type == UserType.MODERATOR) {
-            newsRepository.delete(news);
-        } else if (type == UserType.STANDARD_USER && news.author.getId().equals(currentPrincipalId)) {
+        boolean isAdminOrModerator = type == UserType.ADMIN || type == UserType.MODERATOR;
+        boolean isAuthor = type == UserType.STANDARD_USER && news.author.getId().equals(currentPrincipalId);
+        if (isAdminOrModerator || isAuthor) {
             newsRepository.delete(news);
         } else {
             throw new AccessDeniedException("Użytkownik nie posiada uprawnień do usunięcia newsa");
