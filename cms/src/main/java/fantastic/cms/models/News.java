@@ -1,19 +1,22 @@
 package fantastic.cms.models;
 
-import java.util.Set;
-
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.UuidGenerator;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "news")
 public class News {
     @Id
     @UuidGenerator
+    @EqualsAndHashCode.Include
     public String id;
 
     private String title;
@@ -27,4 +30,7 @@ public class News {
     @JoinColumn(name = "author_id", nullable = false)
     public User author;
 
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderBy("id ASC")
+    private List<Comment> comments = new ArrayList<>();
 }

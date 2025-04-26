@@ -8,6 +8,8 @@ import fantastic.cms.requests.NewsRequest;
 import fantastic.cms.services.CategoryService;
 import fantastic.cms.services.NewsService;
 import fantastic.cms.services.UserService;
+import fantastic.cms.services.CommentService;
+import fantastic.cms.models.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,6 +36,9 @@ public class NewsController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/news/create")
     public String showNewsForm(Model model) {
@@ -83,6 +89,23 @@ public class NewsController {
             return "redirect:/main";
         }
         return "redirect:/main";
+    }
+
+        @GetMapping("/news/{id}/comments")
+    public String showComments(@PathVariable String id, Model model) {
+        List<Comment> comments = commentService.findByNews(id);
+        model.addAttribute("comments", comments);
+        return "comments";
+    }
+
+    @PostMapping("/news/{id}/comments")
+    public String addComment(@PathVariable String id,
+                            @RequestParam String content,
+                            Authentication authentication) {
+        String username = authentication.getName();
+        User author = userService.findByUsername(username);
+        commentService.addComment(id, author.getId(), content);
+        return "redirect:/news/" + id + "/comments";
     }
 
 }

@@ -2,7 +2,9 @@ package fantastic.cms.models;
 
 import fantastic.cms.constant.UserType;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
@@ -10,7 +12,9 @@ import org.hibernate.annotations.UuidGenerator;
 import java.io.Serializable;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "`user`")
 public class User implements Serializable {

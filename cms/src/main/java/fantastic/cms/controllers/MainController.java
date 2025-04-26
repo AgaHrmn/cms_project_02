@@ -51,6 +51,12 @@ public class MainController {
     public String main(Model model) {
         // Fetch some example data from services
         List<News> newsList = newsService.findAll();
+        newsList.forEach(news -> {
+            System.out.println("DEBUG - News: " + news.getTitle());
+            news.getComments().forEach(comment -> 
+                System.out.println("DEBUG - Comment: " + comment.getContent())
+            );
+        }); 
         List<Category> categoryList = categoryService.findAll();
         List<User> userList = userService.findAll();
 
