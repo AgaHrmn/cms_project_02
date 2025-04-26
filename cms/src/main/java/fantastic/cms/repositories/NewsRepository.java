@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface NewsRepository extends JpaRepository<News, String> {
     List<News> findByCategory(Category category);
+    List<News> findByAuthorId(String author);
+    void deleteByCategoryId(String categoryId);
 }

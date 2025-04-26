@@ -67,7 +67,16 @@
     <h2>Users</h2>
     <div class="user-tiles">
         <ul>
-            <li th:each="user : ${userList}" class="user-tile" th:text="${user.username}"></li>
+            <li th:each="user : ${userList}" class="user-tile" >
+                <span th:text="${user.username}"></span>
+                <form th:action="@{/user/delete}" th:method="POST">
+                    <input type="hidden" name="userId" th:value="${user.id}" />
+                    <button type="submit"> X </button>
+                </form>
+                <div th:if="${errorDeleteUser}" class="error-popup">
+                    <span th:text="${errorDeleteUser}"></span>
+                </div>
+            </li>
         </ul>
     </div>
 </section>

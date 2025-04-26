@@ -1,7 +1,10 @@
 package fantastic.cms.services;
 
 import fantastic.cms.constant.UserType;
+import fantastic.cms.repositories.CategoryRepository;
+import fantastic.cms.repositories.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,13 +32,17 @@ public class UserService {
     private final EmailService emailService;
     private final BCryptPasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final CategoryRepository categoryRepository;
+    private final NewsRepository newsRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, VerificationTokenRepository tokenRepository, EmailService emailService, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, VerificationTokenRepository tokenRepository, EmailService emailService, BCryptPasswordEncoder passwordEncoder, CategoryRepository categoryRepository, NewsRepository newsRepository) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+        this.categoryRepository = categoryRepository;
+        this.newsRepository = newsRepository;
     }
 
     public User update(String id, UserRequest userRequest) {
@@ -116,6 +123,27 @@ public class UserService {
         tokenRepository.save(verificationToken);
         logger.info("Verification token created for user: {}", user.getUsername());
     }
+
+    @Transactional
+    public void delete(String userId, String currentPrincipalName) {
+        User user = userRepository.findById(userId).orElseThrow();
+        var type = userRepository.findByUsername(currentPrincipalName).getType();
+        String currentPrincipalId = userRepository.findByUsername(currentPrincipalName).getId();
+        boolean isAdmin = type == UserType.ADMIN;
+        boolean isAuthor = (type == UserType.STANDARD_USER || type == UserType.MODERATOR) && user.getId().equals(currentPrincipalId);
+        if (isAdmin || isAuthor) {
+            var categories = categoryRepository.findByAuthorId(currentPrincipalId);
+            for (var category: categories){
+                category.setAuthor(null);
+            }
+            categoryRepository.saveAllAndFlush(categories);
+            newsRepository.deleteAll(newsRepository.findByAuthorId(currentPrincipalId));
+            userRepository.delete(user);
+        } else {
+            throw new AccessDeniedException("Użytkownik nie posiada uprawnień do usunięcia użytkownika");
+        }
+    }
+
 
     @Transactional
     public boolean verifyUser(String token) {

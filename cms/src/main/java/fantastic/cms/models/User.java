@@ -3,6 +3,8 @@ package fantastic.cms.models;
 import fantastic.cms.constant.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.io.Serializable;
@@ -32,8 +34,14 @@ public class User implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     UserType type;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     Set<Category> categories;
+
+    @OneToMany(mappedBy = "author")
+    Set<News> news;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    VerificationToken verificationToken;
     
     private boolean enabled = false;
 }
