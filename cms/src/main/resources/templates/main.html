@@ -25,27 +25,18 @@
             <li th:each="news : ${newsList}" class="news-tile">
                 <h3 th:text="${news.title}"></h3>
                 <h4 th:text="'By: ' + ${news.author.username}"></h4>
-                <h4 th:text="'Category: ' + ${news.category.name}"></h4>
+                <h5 th:text="'Category: ' + ${news.category.name}"></h5>
                 <p th:text="${news.content}"></p>
             
                 <button type="button" onclick="toggleComments('${news.id}')">Toggle Comments</button>
                 <div id="comments-${news.id}" style="display: none;">
+                    <h4>Comments:</h4>
                     <ul>
                         <li th:each="comment : ${news.comments}">
                             <span th:text="${comment.author.username} + ': ' + ${comment.content}"></span>
                         </li>
                     </ul>
-                    <form th:action="@{/news/{id}/comments(id=${news.id})}" th:method="POST">
-                        <input type="text" name="content" placeholder="Add a comment" />
-                        <button type="submit">Submit</button>
-                    </form>
-                </div>
-                <div id="comments-123" style="display: none;">
-                    <ul>
-                        <li>John: This is a comment</li>
-                        <li>Jane: Another comment</li>
-                    </ul>
-                    <form action="/news/123/comments" method="POST">
+                    <form th:action="@{/news/{id}/comments(id=${news.id})}" th:method="POST" class="comment-form">
                         <input type="text" name="content" placeholder="Add a comment" />
                         <button type="submit">Submit</button>
                     </form>
