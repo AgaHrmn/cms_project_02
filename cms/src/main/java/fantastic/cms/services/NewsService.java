@@ -29,9 +29,10 @@ public class NewsService {
 
     @Autowired
     private UserService userService;
-
+    
+    @Transactional(readOnly = true)
     public List<News> findAll() {
-        return newsRepository.findAll();
+        return newsRepository.findAllWithComments();
     }
 
     public User findByUsername(String username) {
